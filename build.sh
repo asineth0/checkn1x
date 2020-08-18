@@ -3,19 +3,21 @@
 # checkn1x build script
 # https://asineth.gq/checkn1x
 #
-VERSION="1.0.7"
+VERSION="1.0.8"
 CRSOURCE="https://assets.checkra.in/downloads/linux/cli/x86_64/607faa865e90e72834fce04468ae4f5119971b310ecf246128e3126db49e3d4f/checkra1n"
 
+umount work/chroot/dev > /dev/null 2>&1
+umount work/chroot/sys > /dev/null 2>&1
+umount work/chroot/proc > /dev/null 2>&1
 rm -rf work
-
 mkdir -p work/chroot
 mkdir -p work/iso/boot/grub
 
 curl -sL "http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86_64/alpine-minirootfs-3.12.0-x86_64.tar.gz" | tar -xzC work/chroot
 
 mount -o bind /dev work/chroot/dev
-mount -t proc proc work/chroot/proc
 mount -t sysfs sysfs work/chroot/sys
+mount -t proc proc work/chroot/proc
 cp /etc/resolv.conf work/chroot/etc
 
 cat << ! > work/chroot/etc/apk/repositories
@@ -46,11 +48,12 @@ kernel/drivers/hid/hid-generic.ko
 kernel/drivers/hid/hid-cherry.ko
 kernel/drivers/hid/hid-apple.ko
 !
-chroot work/chroot /sbin/mkinitfs -F "checkn1x" -k -t /tmp -q $(ls work/chroot/lib/modules)
+chroot work/chroot /usr/bin/env PATH=/usr/bin:/bin:/usr/sbin:/sbin \
+	/sbin/mkinitfs -F "checkn1x" -k -t /tmp -q $(ls work/chroot/lib/modules)
 
-umount -lf work/chroot/dev
-umount -lf work/chroot/sys
-umount -lf work/chroot/proc
+umount work/chroot/dev
+umount work/chroot/sys
+umount work/chroot/proc
 rm -f work/chroot/etc/resolv.conf
 
 rm -rf work/chroot/lib/modules
