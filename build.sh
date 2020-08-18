@@ -24,7 +24,7 @@ http://dl-cdn.alpinelinux.org/alpine/edge/community
 http://dl-cdn.alpinelinux.org/alpine/edge/testing
 !
 
-cat << ! | chroot work/chroot /bin/login -f root
+cat << ! | chroot work/chroot /usr/bin/env PATH=/usr/bin:/bin:/usr/sbin:/sbin /bin/sh
 apk upgrade
 apk add alpine-base ncurses-terminfo-base udev usbmuxd
 apk add --no-scripts linux-lts linux-firmware-none
@@ -46,7 +46,7 @@ kernel/drivers/hid/hid-generic.ko
 kernel/drivers/hid/hid-cherry.ko
 kernel/drivers/hid/hid-apple.ko
 !
-chroot work/chroot mkinitfs -F "checkn1x" -k -t /tmp -q $(ls work/chroot/lib/modules)
+chroot work/chroot /sbin/mkinitfs -F "checkn1x" -k -t /tmp -q $(ls work/chroot/lib/modules)
 
 umount -lf work/chroot/dev
 umount -lf work/chroot/sys
