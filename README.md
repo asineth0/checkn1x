@@ -18,13 +18,15 @@ Downloads are available under [releases](https://git.asineth.gq/asineth/checkn1x
 
 ## Building
 
-* Add something to the ``VERSION`` string if you want to redistribute your image, i.e. ``1.0.6-foo``.
 * The ``CRSOURCE`` variable is the direct link to the build of checkra1n that will be used.
-* You'll need: ``curl``, ``tar``, ``gzip``, and ``grub-mkrescue``.
+* Add something to the ``VERSION`` variable if you want to redistribute your image, i.e. ``1.0.6-foo``.
 
 ```sh
 # debian/ubuntu/mint/etc.
 apt install curl ca-certificates tar gzip grub2-common grub-pc-bin grub-efi-amd64-bin
+
+# archlinux
+pacman -S --needed curl tar gzip grub mtools xorriso cpio xz
 
 sudo ./build.sh
 ```
