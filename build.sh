@@ -3,30 +3,31 @@
 # checkn1x build script
 # https://asineth.gq/checkn1x
 #
-VERSION="1.0.8"
-CRSOURCE="https://assets.checkra.in/downloads/linux/cli/x86_64/607faa865e90e72834fce04468ae4f5119971b310ecf246128e3126db49e3d4f/checkra1n"
+VERSION="1.1.0"
+ROOTFS="http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86_64/alpine-minirootfs-3.12.0-x86_64.tar.gz"
+CRBINARY="https://assets.checkra.in/downloads/linux/cli/x86_64/607faa865e90e72834fce04468ae4f5119971b310ecf246128e3126db49e3d4f/checkra1n"
 
-umount work/chroot/dev > /dev/null 2>&1
-umount work/chroot/sys > /dev/null 2>&1
-umount work/chroot/proc > /dev/null 2>&1
+umount rootfs/dev > /dev/null 2>&1
+umount rootfs/sys > /dev/null 2>&1
+umount rootfs/proc > /dev/null 2>&1
 rm -rf work
-mkdir -p work/chroot
-mkdir -p work/iso/boot/grub
+mkdir -p work/rootfs work/iso/boot/grub
+cd work
 
-curl -sL "http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86_64/alpine-minirootfs-3.12.0-x86_64.tar.gz" | tar -xzC work/chroot
+curl -sL "$ROOTFS" | tar -xzC rootfs
 
-mount -o bind /dev work/chroot/dev
-mount -t sysfs sysfs work/chroot/sys
-mount -t proc proc work/chroot/proc
-cp /etc/resolv.conf work/chroot/etc
+mount -o bind /dev rootfs/dev
+mount -t sysfs sysfs rootfs/sys
+mount -t proc proc rootfs/proc
+cp /etc/resolv.conf rootfs/etc
 
-cat << ! > work/chroot/etc/apk/repositories
+cat << ! > rootfs/etc/apk/repositories
 http://dl-cdn.alpinelinux.org/alpine/edge/main
 http://dl-cdn.alpinelinux.org/alpine/edge/community
 http://dl-cdn.alpinelinux.org/alpine/edge/testing
 !
 
-cat << ! | chroot work/chroot /usr/bin/env PATH=/usr/bin:/bin:/usr/sbin:/sbin /bin/sh
+cat << ! | chroot rootfs /usr/bin/env PATH=/usr/bin:/bin:/usr/sbin:/sbin /bin/sh
 apk upgrade
 apk add alpine-base ncurses-terminfo-base udev usbmuxd
 apk add --no-scripts linux-lts linux-firmware-none
@@ -37,57 +38,54 @@ rc-update add udev-trigger
 rc-update add udev-settle
 !
 
-cat << ! > work/chroot/etc/mkinitfs/features.d/checkn1x.modules
-kernel/drivers/gpu
-kernel/drivers/i2c
-kernel/drivers/video
-kernel/arch/x86/video/fbdev.ko
+cat << ! > rootfs/etc/mkinitfs/features.d/checkn1x.modules
 kernel/drivers/usb/host
 kernel/drivers/hid/usbhid
 kernel/drivers/hid/hid-generic.ko
 kernel/drivers/hid/hid-cherry.ko
 kernel/drivers/hid/hid-apple.ko
 !
-chroot work/chroot /usr/bin/env PATH=/usr/bin:/bin:/usr/sbin:/sbin \
-	/sbin/mkinitfs -F "checkn1x" -k -t /tmp -q $(ls work/chroot/lib/modules)
+chroot rootfs /usr/bin/env PATH=/usr/bin:/bin:/usr/sbin:/sbin \
+	/sbin/mkinitfs -F "checkn1x" -k -t /tmp -q $(ls rootfs/lib/modules)
 
-umount work/chroot/dev
-umount work/chroot/sys
-umount work/chroot/proc
-rm -f work/chroot/etc/resolv.conf
+umount rootfs/dev
+umount rootfs/sys
+umount rootfs/proc
+rm -f rootfs/etc/resolv.conf
 
-rm -rf work/chroot/lib/modules
-mv work/chroot/tmp/lib/modules work/chroot/lib
-find work/chroot/lib/modules/* -type f -name "*.ko" -exec strip --strip-unneeded {} \;
-find work/chroot/lib/modules/* -type f -name "*.ko" -exec xz -v -T 0 -9 {} \;
-depmod -b work/chroot $(ls work/chroot/lib/modules)
-rm -rf work/chroot/tmp
-rm -rf work/chroot/var
+rm -rf rootfs/lib/modules
+mv rootfs/tmp/lib/modules rootfs/lib
+find rootfs/lib/modules/* -type f -name "*.ko" -exec strip --strip-unneeded {} \;
+find rootfs/lib/modules/* -type f -name "*.ko" -exec xz -v -T 0 -9 {} \;
+depmod -b rootfs $(ls rootfs/lib/modules)
 
-ln -s ../../etc/terminfo work/chroot/usr/share/terminfo
-curl -sLo work/chroot/sbin/checkra1n "$CRSOURCE"
-chmod +x work/chroot/sbin/checkra1n
+ln -s ../../etc/terminfo rootfs/usr/share/terminfo
+curl -sLo rootfs/usr/bin/checkra1n "$CRBINARY"
+chmod 755 rootfs/usr/bin/checkra1n
 
-cat << ! > work/chroot/init
-#!/bin/sh
-exec /sbin/init
-!
-chmod +x work/chroot/init
+cp ../inittab rootfs/etc
+ln -s sbin/init rootfs/init
 
-sed -i 's/getty 38400 tty1/checkra1n/' work/chroot/etc/inittab
-
-cp work/chroot/boot/vmlinuz-lts work/iso/boot/vmlinuz
-rm -rf work/chroot/boot
-
-cat << ! > work/iso/boot/grub/grub.cfg
+cp rootfs/boot/vmlinuz-lts iso/boot/vmlinuz
+cat << ! > iso/boot/grub/grub.cfg
 insmod all_video
-echo 'checkn1x $VERSION :: https://asineth.gq'
 linux /boot/vmlinuz quiet loglevel=3
 initrd /boot/initramfs.xz
 boot
 !
 
-cd work/chroot
+cd rootfs
+rm -rfv tmp/*
+rm -rfv var/cache/*
+rm -rfv boot/*
 find . | cpio -oH newc | xz -z -C crc32 --x86 -9 -e -T 0 > ../iso/boot/initramfs.xz
+cd ..
 
-grub-mkrescue --compress=xz --fonts= --locales= --themes= --modules= -o ../checkn1x-$VERSION.iso ../iso
+grub-mkrescue -o "checkn1x-$VERSION.iso" iso \
+	--compress=xz \
+	--fonts= \
+	--install-modules="linux all_video configfile" \
+	--modules="linux all_video configfile" \
+	--locales= \
+	--themes= \
+	--verbose
