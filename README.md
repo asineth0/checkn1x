@@ -1,4 +1,4 @@
-![](https://git.asineth.gq/asineth/checkn1x/raw/branch/master/icon.png)
+![](https://git.asineth.gq/asineth/checkn1x/raw/branch/master/icon_dark.png)
 
 # checkn1x
 
