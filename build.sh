@@ -3,7 +3,7 @@
 # checkn1x build script
 # https://asineth.gq/checkn1x
 #
-VERSION="1.1.0"
+VERSION="1.1.1"
 ROOTFS="http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86_64/alpine-minirootfs-3.12.0-x86_64.tar.gz"
 CRBINARY="https://assets.checkra.in/downloads/linux/cli/x86_64/607faa865e90e72834fce04468ae4f5119971b310ecf246128e3126db49e3d4f/checkra1n"
 
