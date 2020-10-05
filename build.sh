@@ -4,7 +4,7 @@
 # https://asineth.gq/checkn1x
 #
 VERSION="1.1.2-1"
-ROOTFS="http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86/alpine-minirootfs-3.12.0-x86_64.tar.gz"
+ROOTFS="http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86/alpine-minirootfs-3.12.0-x86.tar.gz"
 CRBINARY="https://assets.checkra.in/downloads/linux/cli/i486/fdcaaa64cf5f1034cbb729b5e421735189444da7cc66c9bd123db26a4b2da930/checkra1n"
 
 # clean up previous attempts
