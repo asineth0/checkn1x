@@ -3,9 +3,9 @@
 # checkn1x build script
 # https://asineth.gq/checkn1x
 #
-VERSION="1.1.2"
-ROOTFS="http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86_64/alpine-minirootfs-3.12.0-x86_64.tar.gz"
-CRBINARY="https://assets.checkra.in/downloads/linux/cli/x86_64/fa08102ba978746ff38fc4c1a0d2e8f231c2cbf79c7ef6d7b504e4683a5b7d05/checkra1n"
+VERSION="1.1.2-1"
+ROOTFS="http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86/alpine-minirootfs-3.12.0-x86_64.tar.gz"
+CRBINARY="https://assets.checkra.in/downloads/linux/cli/i486/fdcaaa64cf5f1034cbb729b5e421735189444da7cc66c9bd123db26a4b2da930/checkra1n"
 
 # clean up previous attempts
 umount -v work/rootfs/dev >/dev/null 2>&1
@@ -85,6 +85,7 @@ cp -av rootfs/boot/vmlinuz-lts iso/boot/vmlinuz
 cat << ! > iso/boot/grub/grub.cfg
 insmod all_video
 echo 'checkn1x $VERSION : https://asineth.gq'
+echo 'checkn1x32 repoistory: https://github.com/Assfugil/checkn1x32'
 linux /boot/vmlinuz quiet loglevel=3
 initrd /boot/initramfs.xz
 boot
