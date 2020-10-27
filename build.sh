@@ -4,7 +4,7 @@
 # https://asineth.gq/checkn1x
 #
 VERSION="1.1.2-1"
-ROOTFS="http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86/alpine-minirootfs-3.12.0-x86.tar.gz"
+ROOTFS="http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86/alpine-minirootfs-3.12.1-x86.tar.gz"
 CRBINARY="https://assets.checkra.in/downloads/linux/cli/i486/fdcaaa64cf5f1034cbb729b5e421735189444da7cc66c9bd123db26a4b2da930/checkra1n"
 
 # clean up previous attempts
@@ -64,10 +64,10 @@ umount -v rootfs/proc
 # fetch resources
 curl -Lo rootfs/usr/local/bin/checkra1n "$CRBINARY"
 mkdir -pv rootfs/opt/odysseyra1n && pushd $_
-curl -LO 'https://github.com/coolstar/odyssey-bootstrap/raw/master/bootstrap_1500-ssh.tar.gz' \
-	-O 'https://github.com/coolstar/odyssey-bootstrap/raw/master/bootstrap_1600-ssh.tar.gz' \
-	-O 'https://github.com/coolstar/odyssey-bootstrap/raw/master/org.coolstar.sileo_1.8.1_iphoneos-arm.deb' \
-	-O 'https://github.com/coolstar/odyssey-bootstrap/raw/master/migration'
+curl -LO 'https://github.com/coolstar/Odyssey-bootstrap/raw/master/bootstrap_1500.tar.gz' \
+	-O 'https://github.com/coolstar/Odyssey-bootstrap/raw/master/bootstrap_1600.tar.gz' \
+	-O 'https://github.com/coolstar/Odyssey-bootstrap/raw/master/org.coolstar.sileo_2.0.0b6_iphoneos-arm.deb' \
+	-O 'https://github.com/coolstar/Odyssey-bootstrap/raw/master/migration'
 find . -type f -name '*.gz' | xargs -n1 -P`nproc` -- gzip -vd
 find . -type f -name '*.tar' | xargs -n1 -P`nproc` -- xz -v --arm -9 -e -T0
 popd
@@ -85,7 +85,7 @@ cp -av rootfs/boot/vmlinuz-lts iso/boot/vmlinuz
 cat << ! > iso/boot/grub/grub.cfg
 insmod all_video
 echo 'checkn1x $VERSION : https://asineth.gq'
-echo 'checkn1x32 repoistory: https://github.com/Assfugil/checkn1x32'
+echo 'checkn1x32 repository: https://github.com/Assfugil/checkn1x32'
 linux /boot/vmlinuz quiet loglevel=3
 initrd /boot/initramfs.xz
 boot
