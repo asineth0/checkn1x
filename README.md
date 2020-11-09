@@ -10,6 +10,8 @@ Downloads are available under [releases](https://github.com/asineth0/checkn1x/re
 
 ## Usage
 
+**Use whatever tool you want, but I'm only officially supporting Etcher.**
+
 1. Download [Etcher](https://etcher.io) and the ISO from releases.
 2. Open the ``.iso`` you downloaded in Etcher.
 3. Write it to your USB drive.

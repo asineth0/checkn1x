@@ -100,18 +100,7 @@ find . | cpio -oH newc | xz -C crc32 --x86 -vz9eT0 > ../iso/boot/initramfs.xz
 popd
 
 # iso creation
-part_acorn.mod
-part_amiga.mod
-part_apple.mod
-part_bsd.mod
-part_dfly.mod
-part_dvh.mod
-part_gpt.mod
-part_msdos.mod
-part_plan.mod
-part_sun.mod
-part_sunpc.mod
-GRUB_MODS="linux all_video configfile echo part_acorn part_amiga part_apple part_bsd part_dfly part_dvh part_gpt part_msdos part_plan part_sun part_sunpc"
+GRUB_MODS="linux all_video configfile echo part_gpt part_msdos"
 grub-mkrescue -o "checkn1x-$VERSION.iso" iso \
 	--compress=xz \
 	--fonts= \
