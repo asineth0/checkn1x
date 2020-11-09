@@ -6,7 +6,7 @@ Linux-based distribution for jailbreaking iOS devices w/ checkra1n.
 
 ## Downloads
 
-Downloads are available under [releases](https://github.com/asineth/checkn1x/releases).
+Downloads are available under [releases](https://github.com/asineth0/checkn1x/releases).
 
 ## Usage
 
