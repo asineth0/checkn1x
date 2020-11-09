@@ -5,7 +5,7 @@
 #
 VERSION="1.1.3"
 ROOTFS="http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86/alpine-minirootfs-3.12.1-x86.tar.gz"
-CRBINARY="https://assets.checkra.in/downloads/linux/cli/i486/https://assets.checkra.in/downloads/linux/cli/i486/a0d4a5e2046582188d8e1ccfa91579947ebe5ce4e3c27ea718a14ce69a780b88/checkra1n"
+CRBINARY="https://assets.checkra.in/downloads/linux/cli/i486/a0d4a5e2046582188d8e1ccfa91579947ebe5ce4e3c27ea718a14ce69a780b88/checkra1n"
 # clean up previous attempts
 umount -v work/rootfs/dev >/dev/null 2>&1
 umount -v work/rootfs/sys >/dev/null 2>&1
