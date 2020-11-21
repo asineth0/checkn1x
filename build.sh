@@ -3,10 +3,28 @@
 # checkn1x build script
 # https://asineth.gq/checkn1x
 #
-VERSION="1.1.4"
-ROOTFS="http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86_64/alpine-minirootfs-3.12.0-x86_64.tar.gz"
-CRBINARY="https://assets.checkra.in/downloads/linux/cli/x86_64/63282886157dd08079c8e41522fdc6d58cfecda783ea8cca79ffc1116f13c355/checkra1n"
 
+SCRIPT_IS_CALLED_WITH_ARCH_ENV=$CHECKN1X_ARCH
+VERSION="1.1.4"
+# Download links
+x86_64_ROOTFS="http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86_64/alpine-netboot-3.12.1-x86_64.tar.gz"
+x86_64_CRBINARY="https://assets.checkra.in/downloads/linux/cli/x86_64/63282886157dd08079c8e41522fdc6d58cfecda783ea8cca79ffc1116f13c355/checkra1n"
+i486_ROOTFS="http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86/alpine-minirootfs-3.12.1-x86.tar.gz"
+i486_CRBINARY="https://assets.checkra.in/downloads/linux/cli/i486/7ea7cc69d58308e2e96bc9f40f63f4f135d3b8fafd49a1bb4f4a849876f49fdb/checkra1n"
+# Set variables accroding to target arch
+if ! [ $CHECKN1X_ARCH ];
+then CHECK1N1X_ARCH="x86_64" 
+fi
+if [ $CHECKN1X_ARCH = "x86_64" ]
+then 
+ROOTFS=$x86_64_ROOTFS
+CRBINARY=$x86_64_CRBINARY
+elif [ $CHECKN1X_ARCH = "i486" ]
+then 
+ROOTFS=$i486_ROOTFS
+CRBINARY=$i486_CRBINARY
+else echo "Unsupported arch: "$CHECKN1X_ARCH
+fi
 # clean up previous attempts
 umount -v work/rootfs/dev >/dev/null 2>&1
 umount -v work/rootfs/sys >/dev/null 2>&1
@@ -32,6 +50,7 @@ cat << ! | chroot rootfs /usr/bin/env PATH=/usr/bin:/bin:/usr/sbin:/sbin /bin/sh
 apk upgrade
 apk add alpine-base ncurses-terminfo-base udev usbmuxd openssh-client sshpass usbutils
 apk add --no-scripts linux-lts linux-firmware-none
+apk del apk-tools
 rc-update add bootmisc
 rc-update add hwdrivers
 rc-update add networking
@@ -101,7 +120,7 @@ popd
 
 # iso creation
 GRUB_MODS="linux all_video configfile echo part_gpt part_msdos"
-grub-mkrescue -o "checkn1x-$VERSION.iso" iso \
+grub-mkrescue -o "../out/checkn1x-$VERSION-$CHECKN1X_ARCH.iso" iso \
 	--compress=xz \
 	--fonts= \
 	--install-modules="$GRUB_MODS" \
@@ -109,3 +128,8 @@ grub-mkrescue -o "checkn1x-$VERSION.iso" iso \
 	--locales= \
 	--themes= \
 	--verbose
+# build 32 bit
+if ! $SCRIPT_IS_CALLED_WITH_ARCH_ENV
+then
+CHECKN1X_ARCH=i486 $0
+fi
