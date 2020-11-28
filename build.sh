@@ -3,9 +3,9 @@
 # checkn1x build script
 # https://asineth.gq/checkn1x
 #
-VERSION="1.1.3"
+VERSION="1.1.4"
 ROOTFS="http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86/alpine-minirootfs-3.12.1-x86.tar.gz"
-CRBINARY="https://assets.checkra.in/downloads/linux/cli/i486/a0d4a5e2046582188d8e1ccfa91579947ebe5ce4e3c27ea718a14ce69a780b88/checkra1n"
+CRBINARY="https://assets.checkra.in/downloads/linux/cli/i486/7ea7cc69d58308e2e96bc9f40f63f4f135d3b8fafd49a1bb4f4a849876f49fdb/checkra1n"
 # clean up previous attempts
 umount -v work/rootfs/dev >/dev/null 2>&1
 umount -v work/rootfs/sys >/dev/null 2>&1
@@ -100,18 +100,7 @@ find . | cpio -oH newc | xz -C crc32 --x86 -vz9eT0 > ../iso/boot/initramfs.xz
 popd
 
 # iso creation
-part_acorn.mod
-part_amiga.mod
-part_apple.mod
-part_bsd.mod
-part_dfly.mod
-part_dvh.mod
-part_gpt.mod
-part_msdos.mod
-part_plan.mod
-part_sun.mod
-part_sunpc.mod
-GRUB_MODS="linux all_video configfile echo part_acorn part_amiga part_apple part_bsd part_dfly part_dvh part_gpt part_msdos part_plan part_sun part_sunpc"
+GRUB_MODS="linux all_video configfile echo part_gpt part_msdos"
 grub-mkrescue -o "checkn1x-$VERSION.iso" iso \
 	--compress=xz \
 	--fonts= \
