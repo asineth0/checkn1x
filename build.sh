@@ -29,8 +29,12 @@ fi
 umount -v work/rootfs/dev >/dev/null 2>&1
 umount -v work/rootfs/sys >/dev/null 2>&1
 umount -v work/rootfs/proc >/dev/null 2>&1
+if [ "$SCRIPT_IS_CALLED_WITH_ARCH_ENV" == "" ]; then
+rm -rf out
+fi
 rm -rf work
 mkdir -pv work/{rootfs,iso/boot/grub}
+mkdir -pv out
 cd work
 
 # fetch rootfs
@@ -50,7 +54,6 @@ cat <<! | chroot rootfs /usr/bin/env PATH=/usr/bin:/bin:/usr/sbin:/sbin /bin/sh
 apk upgrade
 apk add alpine-base ncurses-terminfo-base udev usbmuxd openssh-client sshpass usbutils
 apk add --no-scripts linux-lts linux-firmware-none
-apk del apk-tools --force-broken-world  
 rc-update add bootmisc
 rc-update add hwdrivers
 rc-update add networking
@@ -116,7 +119,7 @@ rm -rfv tmp/*
 rm -rfv boot/*
 rm -rfv var/cache/*
 rm -fv etc/resolv.conf
-rm -rf etc/apk lib/apk
+rm -rf etc/apk lib/apk sbin/apk
 find . | cpio -oH newc | xz -C crc32 --x86 -vz9eT0 >../iso/boot/initramfs.xz
 popd
 
