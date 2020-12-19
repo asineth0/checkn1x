@@ -30,7 +30,7 @@ http://dl-cdn.alpinelinux.org/alpine/edge/testing
 # rootfs packages & services
 cat << ! | chroot rootfs /usr/bin/env PATH=/usr/bin:/bin:/usr/sbin:/sbin /bin/sh
 apk upgrade
-apk add alpine-base ncurses-terminfo-base udev usbmuxd openssh-client sshpass usbutils
+apk add xz alpine-base ncurses-terminfo-base udev usbmuxd openssh-client sshpass usbutils
 apk add --no-scripts linux-lts linux-firmware-none
 rc-update add bootmisc
 rc-update add hwdrivers
