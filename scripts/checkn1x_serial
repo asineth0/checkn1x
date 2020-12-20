@@ -1,0 +1,43 @@
+#!/bin/sh
+# Display when a serial console is used
+clear
+cat <<!
+Welcome to checkn1x.
+
+Connected USB devices:
+$(lsusb | cut -c24-)
+
+1: Checkra1n
+2: Checkra1n cli mode
+3: Odysseyra1n
+4: Usbmuxd (debug)
+5: Shell (debug)
+6: Reboot
+!
+sh -c "sleep 5 && kill -9 $PPID 2>/dev/null" &
+printf "Select an option [1]: "
+read REPLY
+if [ ! $REPLY ]; then REPLY=1; fi
+if [ $REPLY = "1" ]; then
+    exec /usr/local/bin/checkra1n
+elif [ $REPLY = "2" ]; then
+    exec /usr/local/bin/checkra1n -cv
+elif [ $REPLY = "3" ]; then
+    exec /usr/local/bin/checkn1x_odysseyra1n
+elif [ $REPLY = "4" ]; then
+    kill -9 %1
+    echo "Press Ctrl+C when done"
+    sleep 1
+    clear
+    while true; do
+        cat /dev/vcs5 | tail -f -n 200
+        sleep 1
+    done
+elif [ $REPLY = "5" ]; then
+    exec /bin/login -f root
+elif [ $REPLY = "6" ]; then
+    echo "Bye bye :)"
+    exec /sbin/reboot
+else
+    echo $(basename $0)": unknown option '$REPLY'"
+fi
