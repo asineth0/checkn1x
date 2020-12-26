@@ -70,7 +70,7 @@ curl -L -O https://github.com/coolstar/odyssey-bootstrap/raw/master/bootstrap_15
 -O https://github.com/coolstar/odyssey-bootstrap/raw/master/org.coolstar.sileo_2.0.0b6_iphoneos-arm.deb \
 -O https://github.com/coolstar/odyssey-bootstrap/raw/master/org.swift.libswift_5.0-electra2_iphoneos-arm.deb
 find . -type f -name '*.gz' | xargs -n1 -P`nproc` -- gzip -vd
-tar -vc * | xz -zvce9T 0 --arm > odysseyra1n_resources.tar.xz
+tar -vc * | xz --arm -zvce9T 0 > odysseyra1n_resources.tar.xz
 popd
 
 # copy files
