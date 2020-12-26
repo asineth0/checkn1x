@@ -1,4 +1,4 @@
-#!/bin/sh
+####!/bin/sh
 #
 # checkn1x odysseyra1n script
 # https://asineth.gq (original script by coolstar)
@@ -14,15 +14,14 @@ This will migrate your device to Procursus/Odyssey.
 * Restoring your rootfs first is suggested.
 * Make sure your device is connected & trusts this PC.
 
+
 Press enter to continue
 !
 read -s
-
 iproxy 4444 44 >> /dev/null 2>/dev/null &
 
 cd /opt/odysseyra1n
 echo '#!/bin/zsh' > odyssey-device-deploy.sh
-echo 'cd /var/root' >> odyssey-device-deploy.sh
 echo 'if [[ -f "/.bootstrapped" ]]; then' >> odyssey-device-deploy.sh
 echo 'mkdir -p /odyssey && mv migration /odyssey' >> odyssey-device-deploy.sh
 echo 'chmod 0755 /odyssey/migration' >> odyssey-device-deploy.sh
@@ -34,6 +33,8 @@ echo 'if [[ "${VER%.*}" -ge 12 ]] && [[ "${VER%.*}" -lt 13 ]]; then' >> odyssey-
 echo 'CFVER=1500' >> odyssey-device-deploy.sh
 echo 'elif [[ "${VER%.*}" -ge 13 ]]; then' >> odyssey-device-deploy.sh
 echo 'CFVER=1600' >> odyssey-device-deploy.sh
+echo 'elif [[ "${VER%.*}" -ge 14 ]]; then' >> odyssey-device-deploy.sh
+echo 'CFVER=1700' >> odyssey-device-deploy.sh
 echo 'else' >> odyssey-device-deploy.sh
 echo 'echo "${VER} not compatible."' >> odyssey-device-deploy.sh
 echo 'exit 1' >> odyssey-device-deploy.sh
@@ -49,9 +50,7 @@ echo 'rm -rf /etc/dpkg' >> odyssey-device-deploy.sh
 echo 'rm -rf /Library/dpkg' >> odyssey-device-deploy.sh
 echo 'rm -rf /var/cache' >> odyssey-device-deploy.sh
 echo 'rm -rf /var/lib' >> odyssey-device-deploy.sh
-echo 'tar --preserve-permissions -xkf bootstrap_${CFVER}-ssh.tar -C /' >> odyssey-device-deploy.sh
-echo '/Library/dpkg/info/openssh.postinst || true' >> odyssey-device-deploy.sh
-echo 'launchctl load -w /Library/LaunchDaemons/com.openssh.sshd.plist || true' >> odyssey-device-deploy.sh
+echo 'tar --preserve-permissions -xkf bootstrap_${CFVER}.tar -C /' >> odyssey-device-deploy.sh
 printf %s 'SNAPSHOT=$(snappy -s | ' >> odyssey-device-deploy.sh
 printf %s "cut -d ' ' -f 3 | tr -d '\n')" >> odyssey-device-deploy.sh
 echo '' >> odyssey-device-deploy.sh
@@ -69,6 +68,9 @@ echo 'echo "Package: *" > /etc/apt/preferences.d/odyssey' >> odyssey-device-depl
 echo 'echo "Pin: release n=odyssey-ios" >> /etc/apt/preferences.d/odyssey' >> odyssey-device-deploy.sh
 echo 'echo "Pin-Priority: 1001" >> /etc/apt/preferences.d/odyssey' >> odyssey-device-deploy.sh
 echo 'echo "" >> /etc/apt/preferences.d/odyssey' >> odyssey-device-deploy.sh
+echo 'if [[ $VER = 12.1* ]] || [[ $VER = 12.0* ]]; then' >> odyssey-device-deploy.sh
+echo 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11:/usr/games dpkg -i org.swift.libswift_5.0-electra2_iphoneos-arm.deb' >> odyssey-device-deploy.sh
+echo 'fi' >> odyssey-device-deploy.sh
 echo 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11:/usr/games dpkg -i org.coolstar.sileo_2.0.0b6_iphoneos-arm.deb' >> odyssey-device-deploy.sh
 echo 'uicache -p /Applications/Sileo.app' >> odyssey-device-deploy.sh
 echo 'echo -n "" > /var/lib/dpkg/available' >> odyssey-device-deploy.sh
@@ -76,14 +78,16 @@ echo '/Library/dpkg/info/profile.d.postinst' >> odyssey-device-deploy.sh
 echo 'touch /.mount_rw' >> odyssey-device-deploy.sh
 echo 'touch /.installed_odyssey' >> odyssey-device-deploy.sh
 echo 'rm bootstrap*.tar*' >> odyssey-device-deploy.sh
-echo 'rm org.coolstar.sileo_1.8.1_iphoneos-arm.deb' >> odyssey-device-deploy.sh
+echo 'rm migration' >> odyssey-device-deploy.sh
+echo 'rm org.coolstar.sileo_2.0.0b6_iphoneos-arm.deb' >> odyssey-device-deploy.sh
+echo 'rm org.swift.libswift_5.0-electra2_iphoneos-arm.deb' >> odyssey-device-deploy.sh
 echo 'rm odyssey-device-deploy.sh' >> odyssey-device-deploy.sh
+# we decompress on computer, send decompressed stream to device and unpack on device
+# less ram usage on computer
+echo '[*] Decompressing & Copying resources to device'
+xz -vcd odysseyra1n_resources.tar.xz | sshpass -p 'alpine' ssh -p4444 -o 'StrictHostKeyChecking no' -o 'UserKnownHostsFile=/dev/null' root@127.0.0.1 'cat | tar -vx'
 
-echo '[*] Decompressing resources'
-xz -vd *.xz
-
-echo '[*] Copying resources to device'
-sshpass -p 'alpine' scp -P4444 -o 'StrictHostKeyChecking no' -o 'UserKnownHostsFile=/dev/null' * root@127.0.0.1:/var/root
+sshpass -p 'alpine' scp -P4444 -o 'StrictHostKeyChecking no' -o 'UserKnownHostsFile=/dev/null' odyssey-device-deploy.sh root@127.0.0.1:/var/root
 
 echo '[*] Installing Procursus & Sileo on device'
 sshpass -p 'alpine' ssh -p4444 -o 'StrictHostKeyChecking no' -o 'UserKnownHostsFile=/dev/null' root@127.0.0.1 'zsh /var/root/odyssey-device-deploy.sh'

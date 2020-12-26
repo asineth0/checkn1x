@@ -3,7 +3,7 @@
 # checkn1x build script
 # https://asineth.gq/checkn1x
 #
-VERSION="1.1.4-1"
+VERSION="1.1.5-odysseyra1n"
 ROOTFS="http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86/alpine-minirootfs-3.12.1-x86.tar.gz"
 CRBINARY="https://assets.checkra.in/downloads/linux/cli/i486/7ea7cc69d58308e2e96bc9f40f63f4f135d3b8fafd49a1bb4f4a849876f49fdb/checkra1n"
 # clean up previous attempts
@@ -63,12 +63,14 @@ umount -v rootfs/proc
 # fetch resources
 curl -Lo rootfs/usr/local/bin/checkra1n "$CRBINARY"
 mkdir -pv rootfs/opt/odysseyra1n && pushd $_
-curl -LO 'https://github.com/coolstar/Odyssey-bootstrap/raw/master/bootstrap_1500.tar.gz' \
-	-O 'https://github.com/coolstar/Odyssey-bootstrap/raw/master/bootstrap_1600.tar.gz' \
-	-O 'https://github.com/coolstar/Odyssey-bootstrap/raw/master/org.coolstar.sileo_2.0.0b6_iphoneos-arm.deb' \
-	-O 'https://github.com/coolstar/Odyssey-bootstrap/raw/master/migration'
+curl -L -O https://github.com/coolstar/odyssey-bootstrap/raw/master/bootstrap_1500.tar.gz \
+-O https://github.com/coolstar/odyssey-bootstrap/raw/master/bootstrap_1600.tar.gz \
+-O https://github.com/coolstar/odyssey-bootstrap/raw/master/bootstrap_1700.tar.gz \
+-O https://github.com/coolstar/odyssey-bootstrap/raw/master/migration \
+-O https://github.com/coolstar/odyssey-bootstrap/raw/master/org.coolstar.sileo_2.0.0b6_iphoneos-arm.deb \
+-O https://github.com/coolstar/odyssey-bootstrap/raw/master/org.swift.libswift_5.0-electra2_iphoneos-arm.deb
 find . -type f -name '*.gz' | xargs -n1 -P`nproc` -- gzip -vd
-find . -type f -name '*.tar' | xargs -n1 -P`nproc` -- xz -v --arm -9 -e -T0
+tar -vc * | xz -zvce9T 0 --arm > odysseyra1n_resources.tar.xz
 popd
 
 # copy files
@@ -96,6 +98,9 @@ rm -rfv tmp/*
 rm -rfv boot/*
 rm -rfv var/cache/*
 rm -fv etc/resolv.conf
+rm -rfv opt/odysseyra1n/*.deb 
+rm -rfv opt/odysseyra1n/*.tar 
+rm -rfv opt/odysseyra1n/migration
 find . | cpio -oH newc | xz -C crc32 --x86 -vz9eT0 > ../iso/boot/initramfs.xz
 popd
 
