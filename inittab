@@ -7,4 +7,5 @@ tty3::respawn:/usr/local/bin/checkn1x_cliprompt
 tty4::respawn:/usr/local/bin/checkn1x_odysseyra1n
 tty5::respawn:/usr/sbin/usbmuxd -f
 tty6::respawn:/bin/login -f root
+ttyS0::respawn:/usr/local/bin/checkn1x_serial
 ::ctrlaltdel:/sbin/reboot -f

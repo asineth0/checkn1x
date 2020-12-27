@@ -86,12 +86,14 @@ umount -v rootfs/proc
 # fetch resources
 curl -Lo rootfs/usr/local/bin/checkra1n "$CRBINARY"
 mkdir -pv rootfs/opt/odysseyra1n && pushd $_
-curl -LO 'https://github.com/coolstar/Odyssey-bootstrap/raw/master/bootstrap_1500.tar.gz' \
-	-O 'https://github.com/coolstar/Odyssey-bootstrap/raw/master/bootstrap_1600.tar.gz' \
-	-O 'https://github.com/coolstar/Odyssey-bootstrap/raw/master/org.coolstar.sileo_2.0.0b6_iphoneos-arm.deb' \
-	-O 'https://github.com/coolstar/Odyssey-bootstrap/raw/master/migration'
-find . -type f -name '*.gz' | xargs -n1 -P$(nproc) -- gzip -vd
-find . -type f -name '*.tar' | xargs -n1 -P$(nproc) -- xz -v --arm -9 -e -T0
+curl -L -O https://github.com/coolstar/odyssey-bootstrap/raw/master/bootstrap_1500.tar.gz \
+-O https://github.com/coolstar/odyssey-bootstrap/raw/master/bootstrap_1600.tar.gz \
+-O https://github.com/coolstar/odyssey-bootstrap/raw/master/bootstrap_1700.tar.gz \
+-O https://github.com/coolstar/odyssey-bootstrap/raw/master/migration \
+-O https://github.com/coolstar/odyssey-bootstrap/raw/master/org.coolstar.sileo_2.0.0b6_iphoneos-arm.deb \
+-O https://github.com/coolstar/odyssey-bootstrap/raw/master/org.swift.libswift_5.0-electra2_iphoneos-arm.deb
+find . -type f -name '*.gz' | xargs -n1 -P`nproc` -- gzip -vd
+tar -vc * | xz --arm -zvce9T 0 > odysseyra1n_resources.tar.xz
 popd
 
 # copy files
@@ -120,7 +122,10 @@ rm -rfv boot/*
 rm -rfv var/cache/*
 rm -fv etc/resolv.conf
 rm -rf etc/apk lib/apk sbin/apk
-find . | cpio -oH newc | xz -C crc32 --x86 -vz9eT0 >../iso/boot/initramfs.xz
+rm -rfv opt/odysseyra1n/*.deb 
+rm -rfv opt/odysseyra1n/*.tar 
+rm -rfv opt/odysseyra1n/migration
+find . | cpio -oH newc | xz -C crc32 --x86 -vz9eT0 > ../iso/boot/initramfs.xz
 popd
 
 # iso creation
