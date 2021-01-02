@@ -5,7 +5,7 @@
 #
 
 SCRIPT_IS_CALLED_WITH_ARCH_ENV=$CHECKN1X_ARCH
-VERSION="1.1.5-1"
+VERSION="1.1.5"
 # Download links
 x86_64_ROOTFS="http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86_64/alpine-minirootfs-3.12.1-x86_64.tar.gz"
 x86_64_CRBINARY="https://assets.checkra.in/downloads/linux/cli/x86_64/4bf2f7e1dd201eda7d6220350db666f507d6f70e07845b772926083a8a96cd2b/checkra1n"
@@ -136,8 +136,7 @@ grub-mkrescue -o "../out/checkn1x-$VERSION-$CHECKN1X_ARCH.iso" iso \
 	--install-modules="$GRUB_MODS" \
 	--modules="$GRUB_MODS" \
 	--locales= \
-	--themes= \
-	--verbose
+	--themes=
 # build 32 bit
 if [ "$SCRIPT_IS_CALLED_WITH_ARCH_ENV" == "" ]; then
     cd ..
