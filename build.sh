@@ -3,7 +3,7 @@
 # checkn1x build script
 # https://asineth.gq/checkn1x
 #
-VERSION="1.1.5"
+VERSION="1.1.6"
 ROOTFS="https://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86_64/alpine-minirootfs-3.12.3-x86_64.tar.gz"
 CRBINARY="https://assets.checkra.in/downloads/linux/cli/x86_64/4bf2f7e1dd201eda7d6220350db666f507d6f70e07845b772926083a8a96cd2b/checkra1n"
 
@@ -22,7 +22,7 @@ mount -vt sysfs sysfs rootfs/sys
 mount -vt proc proc rootfs/proc
 cp /etc/resolv.conf rootfs/etc
 cat << ! > rootfs/etc/apk/repositories
-http://dl-cdn.alpinelinux.org/alpine/edge/main
+http://dl-cdn.alpinelinux.org/alpine/v3.12/main
 http://dl-cdn.alpinelinux.org/alpine/edge/community
 http://dl-cdn.alpinelinux.org/alpine/edge/testing
 !
@@ -30,11 +30,10 @@ http://dl-cdn.alpinelinux.org/alpine/edge/testing
 # rootfs packages & services
 cat << ! | chroot rootfs /usr/bin/env PATH=/usr/bin:/bin:/usr/sbin:/sbin /bin/sh
 apk upgrade
-apk add alpine-base ncurses-terminfo-base udev usbmuxd openssh-client sshpass usbutils
+apk add alpine-base ncurses-terminfo-base udev usbmuxd libusbmuxd-progs openssh-client sshpass usbutils
 apk add --no-scripts linux-lts linux-firmware-none
 rc-update add bootmisc
 rc-update add hwdrivers
-rc-update add networking
 rc-update add udev
 rc-update add udev-trigger
 rc-update add udev-settle
@@ -47,6 +46,7 @@ kernel/drivers/hid/usbhid
 kernel/drivers/hid/hid-generic.ko
 kernel/drivers/hid/hid-cherry.ko
 kernel/drivers/hid/hid-apple.ko
+kernel/net/ipv4
 !
 chroot rootfs /usr/bin/env PATH=/usr/bin:/bin:/usr/sbin:/sbin \
 	/sbin/mkinitfs -F "checkn1x" -k -t /tmp -q $(ls rootfs/lib/modules)
@@ -78,7 +78,6 @@ cp -av ../scripts/* rootfs/usr/local/bin
 chmod -v 755 rootfs/usr/local/bin/*
 ln -sv sbin/init rootfs/init
 ln -sv ../../etc/terminfo rootfs/usr/share/terminfo # fix ncurses
-echo 'auto lo' > rootfs/etc/network/interfaces # fix 127.0.0.1
 
 # boot config
 cp -av rootfs/boot/vmlinuz-lts iso/boot/vmlinuz

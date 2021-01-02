@@ -18,6 +18,7 @@ Press enter to continue
 !
 read -s
 
+ip link set lo up
 iproxy 4444 44 >> /dev/null 2>/dev/null &
 
 cd /opt/odysseyra1n
@@ -49,7 +50,7 @@ echo 'rm -rf /etc/dpkg' >> odyssey-device-deploy.sh
 echo 'rm -rf /Library/dpkg' >> odyssey-device-deploy.sh
 echo 'rm -rf /var/cache' >> odyssey-device-deploy.sh
 echo 'rm -rf /var/lib' >> odyssey-device-deploy.sh
-echo 'tar --preserve-permissions -xkf bootstrap_${CFVER}-ssh.tar -C /' >> odyssey-device-deploy.sh
+echo 'tar --preserve-permissions -xkf bootstrap_${CFVER}.tar -C /' >> odyssey-device-deploy.sh
 echo '/Library/dpkg/info/openssh.postinst || true' >> odyssey-device-deploy.sh
 echo 'launchctl load -w /Library/LaunchDaemons/com.openssh.sshd.plist || true' >> odyssey-device-deploy.sh
 printf %s 'SNAPSHOT=$(snappy -s | ' >> odyssey-device-deploy.sh
@@ -83,11 +84,9 @@ echo '[*] Decompressing resources'
 xz -vd *.xz
 
 echo '[*] Copying resources to device'
-sshpass -p 'alpine' scp -P4444 -o 'StrictHostKeyChecking no' -o 'UserKnownHostsFile=/dev/null' * root@127.0.0.1:/var/root
+sshpass -p 'alpine' scp -P4444 -o 'StrictHostKeyChecking no' * 127.0.0.1:/var/root
 
 echo '[*] Installing Procursus & Sileo on device'
-sshpass -p 'alpine' ssh -p4444 -o 'StrictHostKeyChecking no' -o 'UserKnownHostsFile=/dev/null' root@127.0.0.1 'zsh /var/root/odyssey-device-deploy.sh'
+sshpass -p 'alpine' ssh -p4444 -o 'StrictHostKeyChecking no' 127.0.0.1 zsh /var/root/odyssey-device-deploy.sh
 
 echo '[+] Done'
-sleep 10
-killall iproxy
