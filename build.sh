@@ -5,12 +5,12 @@
 #
 
 SCRIPT_IS_CALLED_WITH_ARCH_ENV=$CHECKN1X_ARCH
-VERSION="1.1.5"
+VERSION="1.1.5-1"
 # Download links
 x86_64_ROOTFS="http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86_64/alpine-minirootfs-3.12.1-x86_64.tar.gz"
-x86_64_CRBINARY="https://assets.checkra.in/downloads/linux/cli/x86_64/63282886157dd08079c8e41522fdc6d58cfecda783ea8cca79ffc1116f13c355/checkra1n"
+x86_64_CRBINARY="https://assets.checkra.in/downloads/linux/cli/x86_64/4bf2f7e1dd201eda7d6220350db666f507d6f70e07845b772926083a8a96cd2b/checkra1n"
 i486_ROOTFS="http://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86/alpine-minirootfs-3.12.1-x86.tar.gz"
-i486_CRBINARY="https://assets.checkra.in/downloads/linux/cli/i486/7ea7cc69d58308e2e96bc9f40f63f4f135d3b8fafd49a1bb4f4a849876f49fdb/checkra1n"
+i486_CRBINARY="https://assets.checkra.in/downloads/linux/cli/i486/7926a90f4d0b73bdc514bd813e1443e4fc579e1674e34622b4bd1002a3322e0f/checkra1n"
 # Set variables accroding to target arch
 if [ "$CHECKN1X_ARCH" == '' ]
 then
