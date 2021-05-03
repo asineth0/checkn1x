@@ -22,7 +22,7 @@ ip link set lo up
 iproxy 4444 44 >> /dev/null 2>/dev/null &
 
 cd /opt/odysseyra1n
-echo '#!/bin/bash' > odyssey-device-deploy.sh
+echo '#!/bin/zsh' > odyssey-device-deploy.sh
 echo 'cd /var/root' >> odyssey-device-deploy.sh
 echo 'if [[ -f "/.bootstrapped" ]]; then' >> odyssey-device-deploy.sh
 echo 'mkdir -p /odyssey && mv migration /odyssey' >> odyssey-device-deploy.sh
