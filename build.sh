@@ -3,9 +3,9 @@
 # checkn1x build script
 # https://asineth.gq/checkn1x
 #
-VERSION="1.1.6"
+VERSION="1.1.7"
 ROOTFS="https://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86_64/alpine-minirootfs-3.12.3-x86_64.tar.gz"
-CRBINARY="https://assets.checkra.in/downloads/linux/cli/x86_64/4bf2f7e1dd201eda7d6220350db666f507d6f70e07845b772926083a8a96cd2b/checkra1n"
+CRBINARY="https://assets.checkra.in/downloads/linux/cli/x86_64/845bd19fb857e5546ba312e768ab42e8aeab7a34470b07f60a9892e92fe8273e/checkra1n"
 
 # clean up previous attempts
 umount -v work/rootfs/dev >/dev/null 2>&1
