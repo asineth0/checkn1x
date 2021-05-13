@@ -6,9 +6,8 @@ Welcome to checkn1x.
 Alt+F1 : Welcome
 Alt+F2 : Checkra1n
 Alt+F3 : Checkra1n CLI-mode
-Alt+F4 : Odysseyra1n
-Alt+F5 : Usbmuxd (debug)
-Alt+F6 : Shell (debug)
+Alt+F4 : Usbmuxd (debug)
+Alt+F5 : Shell (debug)
 
 Connected USB devices:
 `lsusb | cut -c24-`

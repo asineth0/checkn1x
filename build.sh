@@ -3,9 +3,9 @@
 # checkn1x build script
 # https://asineth.gq/checkn1x
 #
-VERSION="1.1.6"
-ROOTFS="https://dl-cdn.alpinelinux.org/alpine/v3.12/releases/x86_64/alpine-minirootfs-3.12.3-x86_64.tar.gz"
-CRBINARY="https://assets.checkra.in/downloads/linux/cli/x86_64/4bf2f7e1dd201eda7d6220350db666f507d6f70e07845b772926083a8a96cd2b/checkra1n"
+VERSION="1.1.7"
+ROOTFS="https://dl-cdn.alpinelinux.org/alpine/v3.13/releases/x86_64/alpine-minirootfs-3.13.5-x86_64.tar.gz"
+CRBINARY="https://assets.checkra.in/downloads/linux/cli/x86_64/dac9968939ea6e6bfbdedeb41d7e2579c4711dc2c5083f91dced66ca397dc51d/checkra1n"
 
 # clean up previous attempts
 umount -v work/rootfs/dev >/dev/null 2>&1
@@ -63,14 +63,6 @@ umount -v rootfs/proc
 
 # fetch resources
 curl -Lo rootfs/usr/local/bin/checkra1n "$CRBINARY"
-mkdir -pv rootfs/opt/odysseyra1n && pushd $_
-curl -LO 'https://github.com/coolstar/Odyssey-bootstrap/raw/master/bootstrap_1500.tar.gz' \
-	-O 'https://github.com/coolstar/Odyssey-bootstrap/raw/master/bootstrap_1600.tar.gz' \
-	-O 'https://github.com/coolstar/Odyssey-bootstrap/raw/master/org.coolstar.sileo_2.0.0b6_iphoneos-arm.deb' \
-	-O 'https://github.com/coolstar/Odyssey-bootstrap/raw/master/migration'
-find . -type f -name '*.gz' | xargs -n1 -P`nproc` -- gzip -vd
-find . -type f -name '*.tar' | xargs -n1 -P`nproc` -- xz -v --arm -9 -e -T0
-popd
 
 # copy files
 cp -av ../inittab rootfs/etc
@@ -99,11 +91,4 @@ find . | cpio -oH newc | xz -C crc32 --x86 -vz9eT0 > ../iso/boot/initramfs.xz
 popd
 
 # iso creation
-GRUB_MODS="linux all_video configfile echo part_gpt part_msdos"
-grub-mkrescue -o "checkn1x-$VERSION.iso" iso \
-	--compress=xz \
-	--fonts= \
-	--install-modules="$GRUB_MODS" \
-	--modules="$GRUB_MODS" \
-	--locales= \
-	--themes=
+grub-mkrescue -o "checkn1x-$VERSION.iso" iso --compress=xz

@@ -24,11 +24,6 @@ Downloads are available under [releases](https://github.com/asineth0/checkn1x/re
 * Add something to the ``VERSION`` variable if you want to redistribute your image, i.e. ``1.0.6-foo``.
 
 ```sh
-# debian/ubuntu/mint/etc.
-apt install curl ca-certificates tar gzip grub2-common grub-pc-bin grub-efi-amd64-bin
-
-# archlinux
-pacman -S --needed curl tar gzip grub mtools xorriso cpio xz
-
+sudo apt install -y curl ca-certificates tar gzip grub2-common grub-pc-bin grub-efi-amd64-bin xorriso mtools
 sudo ./build.sh
 ```
