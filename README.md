@@ -1,8 +1,10 @@
-![](https://github.com/asineth0/checkn1x/blob/master/icon_dark.png?raw=true)
+<div align="center">
+<img src="https://raw.githubusercontent.com/asineth0/checkn1x/master/icon_dark.png">
 
 # checkn1x
 
 Linux-based distribution for jailbreaking iOS devices w/ checkra1n.
+</div>
 
 ## Downloads
 
