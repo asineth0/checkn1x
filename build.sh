@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # checkn1x build script
-# https://asineth.gq/checkn1x
+# https://asineth.me/checkn1x
 #
 VERSION="1.1.7"
 ROOTFS="https://dl-cdn.alpinelinux.org/alpine/v3.13/releases/x86_64/alpine-minirootfs-3.13.5-x86_64.tar.gz"
@@ -75,7 +75,7 @@ ln -sv ../../etc/terminfo rootfs/usr/share/terminfo # fix ncurses
 cp -av rootfs/boot/vmlinuz-lts iso/boot/vmlinuz
 cat << ! > iso/boot/grub/grub.cfg
 insmod all_video
-echo 'checkn1x $VERSION : https://asineth.gq'
+echo 'checkn1x $VERSION : https://asineth.me'
 linux /boot/vmlinuz quiet loglevel=3
 initrd /boot/initramfs.xz
 boot
