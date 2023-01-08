@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # checkn1x build script
-# https://asineth.me/checkn1x
+# https://asineth.me/
 #
-VERSION="1.1.7"
-ROOTFS="https://dl-cdn.alpinelinux.org/alpine/v3.13/releases/x86_64/alpine-minirootfs-3.13.5-x86_64.tar.gz"
+VERSION="1.1.8"
+ROOTFS="https://dl-cdn.alpinelinux.org/alpine/v3.17/releases/x86_64/alpine-minirootfs-3.17.0-x86_64.tar.gz"
 CRBINARY="https://assets.checkra.in/downloads/linux/cli/x86_64/dac9968939ea6e6bfbdedeb41d7e2579c4711dc2c5083f91dced66ca397dc51d/checkra1n"
 
 # clean up previous attempts
@@ -22,7 +22,7 @@ mount -vt sysfs sysfs rootfs/sys
 mount -vt proc proc rootfs/proc
 cp /etc/resolv.conf rootfs/etc
 cat << ! > rootfs/etc/apk/repositories
-http://dl-cdn.alpinelinux.org/alpine/v3.12/main
+http://dl-cdn.alpinelinux.org/alpine/v3.17/main
 http://dl-cdn.alpinelinux.org/alpine/edge/community
 http://dl-cdn.alpinelinux.org/alpine/edge/testing
 !

@@ -1,14 +1,17 @@
 <div align="center">
-<img src="https://raw.githubusercontent.com/asineth0/checkn1x/master/icon_dark.png">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="icon_light.png">
+<img src="icon_dark.png" alt="icon">
+</picture>
 
-# checkn1x
+# checkn1x-surface
 
-Linux-based distribution for jailbreaking iOS devices w/ checkra1n.
+Linux-based distribution (with Surface support) for jailbreaking iOS devices w/ checkra1n.
 </div>
 
 ## Downloads
 
-Downloads are available under [releases](https://github.com/asineth0/checkn1x/releases).
+Downloads are available under [releases](https://github.com/l1ghtmann/checkn1x-surface/releases).
 
 ## Usage
 
@@ -23,7 +26,7 @@ Downloads are available under [releases](https://github.com/asineth0/checkn1x/re
 ## Building
 
 * The ``CRSOURCE`` variable is the direct link to the build of checkra1n that will be used.
-* Add something to the ``VERSION`` variable if you want to redistribute your image, i.e. ``1.0.6-foo``.
+* Add something to the ``VERSION`` variable if you want to redistribute your image, i.e., ``1.0.6-foo``.
 
 ```sh
 sudo apt install -y curl ca-certificates tar gzip grub2-common grub-pc-bin grub-efi-amd64-bin xorriso mtools

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 clear
 cat << !
 Welcome to checkn1x.

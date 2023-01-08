@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 echo 'Press enter to run checkra1n in CLI mode.'
 read -s
 exec /usr/local/bin/checkra1n -cv
