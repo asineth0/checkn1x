@@ -7,6 +7,11 @@ VERSION="1.1.8"
 ROOTFS="https://dl-cdn.alpinelinux.org/alpine/v3.14/releases/x86_64/alpine-minirootfs-3.14.8-x86_64.tar.gz"
 CRBINARY="https://assets.checkra.in/downloads/linux/cli/x86_64/dac9968939ea6e6bfbdedeb41d7e2579c4711dc2c5083f91dced66ca397dc51d/checkra1n"
 
+if [[ $EUID -ne 0 ]]; then
+	echo "$0: This script must be run with sudo or as su. Exiting."
+	exit 1
+fi
+
 # clean up previous attempts
 umount -v work/rootfs/dev >/dev/null 2>&1
 umount -v work/rootfs/sys >/dev/null 2>&1
