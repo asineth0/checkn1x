@@ -13,9 +13,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # clean up previous attempts
-umount -v work/rootfs/dev >/dev/null 2>&1
-umount -v work/rootfs/sys >/dev/null 2>&1
-umount -vl work/rootfs/proc >/dev/null 2>&1
+umount -v work/rootfs/{dev,sys,proc} >/dev/null 2>&1
 rm -rf work
 mkdir -pv work/{rootfs,iso/boot/grub}
 cd work
@@ -61,9 +59,7 @@ find rootfs/lib/modules/* -type f -name "*.ko" -exec strip -v --strip-unneeded {
 depmod -b rootfs $(ls rootfs/lib/modules)
 
 # unmount fs
-umount -v rootfs/dev
-umount -v rootfs/sys
-umount -v rootfs/proc
+umount -v rootfs/{dev,sys,proc}
 
 # fetch resources
 curl -Lo rootfs/usr/local/bin/checkra1n "$CRBINARY"
