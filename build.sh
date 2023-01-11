@@ -25,9 +25,9 @@ mount -vt sysfs sysfs rootfs/sys
 mount -vt proc proc rootfs/proc
 cp /etc/resolv.conf rootfs/etc
 cat << ! > rootfs/etc/apk/repositories
-https://dl-cdn.alpinelinux.org/alpine/v3.13/main
-https://dl-cdn.alpinelinux.org/alpine/v3.13/community
-https://dl-cdn.alpinelinux.org/alpine/edge/testing
+http://dl-cdn.alpinelinux.org/alpine/v3.13/main
+http://dl-cdn.alpinelinux.org/alpine/v3.13/community
+http://dl-cdn.alpinelinux.org/alpine/edge/testing
 !
 
 # rootfs packages & services
