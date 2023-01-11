@@ -30,7 +30,7 @@ Downloads are available under [releases](https://github.com/asineth0/checkn1x/re
 
 ## Building
 
-* The ``CRSOURCE`` variable is the direct link to the build of checkra1n that will be used.
+* The ``CRBINARY`` variable is the direct link to the build of checkra1n that will be used.
 * Add something to the ``VERSION`` variable if you want to redistribute your image, i.e., ``1.0.6-foo``.
 
 ```sh
