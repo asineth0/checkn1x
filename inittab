@@ -1,10 +1,9 @@
 # /etc/inittab
 ::sysinit:/sbin/openrc sysinit
 ::wait:/sbin/openrc default
-::respawn:/usr/local/bin/checkra1n -cqv
-# tty1::respawn:/usr/local/bin/checkn1x_welcome
-# tty2::respawn:/usr/local/bin/checkra1n
-# tty3::respawn:/usr/local/bin/checkn1x_cliprompt
-# tty4::respawn:/usr/sbin/usbmuxd -f
-# tty5::respawn:/bin/login -f root
+tty1::respawn:/usr/local/bin/checkn1x_welcome
+tty2::respawn:/usr/local/bin/checkra1n
+tty3::respawn:/usr/local/bin/checkn1x_cliprompt
+tty4::respawn:/usr/sbin/usbmuxd -f
+tty5::respawn:/bin/login -f root
 ::ctrlaltdel:/sbin/reboot -f

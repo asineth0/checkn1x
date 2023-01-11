@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-# checkn1x-surface build script
-# OG script by https://asineth.me/
+# checkn1x build script
+# https://asineth.me/checkn1x
 #
 VERSION="1.1.8"
 ROOTFS="https://dl-cdn.alpinelinux.org/alpine/v3.14/releases/x86_64/alpine-minirootfs-3.14.8-x86_64.tar.gz"
@@ -45,7 +45,7 @@ rc-update add udev-settle
 !
 
 # kernel modules
-cat << ! > rootfs/etc/mkinitfs/features.d/checkn1x-surface.modules
+cat << ! > rootfs/etc/mkinitfs/features.d/checkn1x.modules
 kernel/drivers/usb/host
 kernel/drivers/hid/usbhid
 kernel/drivers/hid/hid-generic.ko
@@ -54,7 +54,7 @@ kernel/drivers/hid/hid-apple.ko
 kernel/net/ipv4
 !
 chroot rootfs /usr/bin/env PATH=/usr/bin:/bin:/usr/sbin:/sbin \
-	/sbin/mkinitfs -F "checkn1x-surface" -k -t /tmp -q $(ls rootfs/lib/modules)
+	/sbin/mkinitfs -F "checkn1x" -k -t /tmp -q $(ls rootfs/lib/modules)
 rm -rfv rootfs/lib/modules
 mv -v rootfs/tmp/lib/modules rootfs/lib
 find rootfs/lib/modules/* -type f -name "*.ko" -exec strip -v --strip-unneeded {} \; -exec xz --x86 -v9eT0 \;
@@ -79,8 +79,7 @@ ln -sv ../../etc/terminfo rootfs/usr/share/terminfo # fix ncurses
 cp -av rootfs/boot/vmlinuz-lts iso/boot/vmlinuz
 cat << ! > iso/boot/grub/grub.cfg
 insmod all_video
-echo 'checkn1x-surface $VERSION'
-echo 'OG script by https://asineth.me'
+echo 'checkn1x $VERSION : https://asineth.me'
 linux /boot/vmlinuz quiet loglevel=3
 initrd /boot/initramfs.xz
 boot
@@ -89,8 +88,8 @@ boot
 # initramfs
 pushd rootfs
 rm -rfv tmp/* boot/* var/cache/* etc/resolv.conf
-find . | cpio -oH newc | xz -C crc32 --x86 -vz9eT0 > ../iso/boot/initramfs.xz
+find . | cpio -oH newc | xz -C crc32 --x86 -vz9eT$(nproc --all) > ../iso/boot/initramfs.xz
 popd
 
 # iso creation
-grub-mkrescue -o "checkn1x-surface-$VERSION.iso" iso --compress=xz
+grub-mkrescue -o "checkn1x-$VERSION.iso" iso --compress=xz

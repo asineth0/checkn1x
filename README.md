@@ -4,14 +4,14 @@
 <img src="icon_dark.png" alt="icon">
 </picture>
 
-# checkn1x-surface
+# checkn1x
 
-Linux-based distribution (with Surface support) for jailbreaking iOS devices w/ checkra1n.
+Linux-based distribution for jailbreaking iOS devices w/ checkra1n.
 </div>
 
 ## Downloads
 
-Downloads are available under [releases](https://github.com/l1ghtmann/checkn1x-surface/releases).
+Downloads are available under [releases](https://github.com/asineth0/checkn1x/releases).
 
 ## Usage
 ### Etcher
